@@ -101,5 +101,7 @@
     }
   </script>
 </body>
-<button onclick="goToRecharge()">হোম</button>
+<a href="income.html">
+  <button>💼 আয়</button>
+</a>
 </html>
