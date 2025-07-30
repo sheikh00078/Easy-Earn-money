@@ -172,4 +172,7 @@
   </script>
 </body>
 <button onclick="goToIncome()">💼 আয়</button>
+<a href="home.html">
+  <button>🏠 হোম</button>
+</a>
 </html>
