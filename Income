@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>আয় - Eazy to Earn</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://i.imgur.com/KnfGxIR.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      background: rgba(0,0,0,0.8);
+      border-radius: 10px;
+      box-shadow: 0 0 10px black;
+    }
+    .vip-box {
+      border: 2px solid #ffffff33;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: rgba(255,255,255,0.05);
+      position: relative;
+    }
+    .vip-box img {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #28a745;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    #myVip {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .vip-status {
+      background-color: rgba(0, 123, 255, 0.3);
+      padding: 15px;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>💼 আয় পেইজ</h2>
+
+    <div class="vip-box" id="vip1">
+      <h3>🏙️ VIP-1 (৳500)</h3>
+      <p>ঘণ্টায় আয়: ৳4.17</p>
+      <p>দিনে আয়: ৳100</p>
+      <p>মেয়াদ: ৯০ দিন</p>
+      <p>মোট আয়: ৳9000</p>
+      <img src="https://i.imgur.com/IhXQ7XC.png" alt="VIP 1">
+      <button onclick="buyVIP(1)">VIP-1 কিনুন</button>
+    </div>
+    <div class="vip-box" id="vip2">
+      <h3>🏢 VIP-2 (৳1000)</h3>
+      <p>ঘণ্টায় আয়: ৳8.50</p>
+      <p>দিনে আয়: ৳200</p>
+      <p>মেয়াদ: ৯০ দিন</p>
+      <p>মোট আয়: ৳18000</p>
+      <img src="https://i.imgur.com/vd1FhHk.png" alt="VIP 2">
+      <button onclick="buyVIP(2)">VIP-2 কিনুন</button>
+    </div>
+</div>
+    <div class="vip-box" id="vip3">
+      <h3>🏢 VIP-3 (৳2000)</h3>
+      <p>ঘণ্টায় আয়: ৳16.50</p>
+      <p>দিনে আয়: ৳384</p>
+      <p>মেয়াদ: ৯০ দিন</p>
+      <p>মোট আয়: ৳34560</p>
+      <img src="https://i.imgur.com/vd1FhHk.png" alt="VIP 2">
+      <button onclick="buyVIP(2)">VIP-3 কিনুন</button>
+    <div id="myVip">
+      <h3>📊 আমার VIP</h3>
+      <div id="vipStatus"></div>
+    </div>
+  </div>
+
+  <script>
+    let user = JSON.parse(localStorage.getItem("currentUser")) || {
+      balance: 0,
+      vip: null,
+      vipStart: null
+    };
+
+    const vipInfo = {
+      1: { cost: 500, hourly: 4.17, name: "VIP-1" },
+      2: { cost: 1000, hourly: 8.50, name: "VIP-2" }
+    };
+
+    function buyVIP(id) {
+      if (user.vip) {
+        alert("❌ আপনি ইতিমধ্যে একটি VIP চালু করেছেন।");
+        return;
+      }
+
+      const vip = vipInfo[id];
+
+      if (user.balance < vip.cost) {
+        alert("⚠️ পর্যাপ্ত ব্যালেন্স নেই। VIP কিনতে ব্যালেন্স রিচার্জ করুন।");
+        return;
+      }
+
+      user.balance -= vip.cost;
+      user.vip = id;
+      user.vipStart = Date.now();
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      alert(`🎉 ${vip.name} সক্রিয় হয়েছে! প্রতি ঘণ্টায় আয় হবে ৳${vip.hourly}`);
+      showVIPStatus();
+    }
+
+    function showVIPStatus() {
+      const vip = vipInfo[user.vip];
+      const statusDiv = document.getElementById("vipStatus");
+      if (!vip) {
+        statusDiv.innerHTML = "<p>🚫 কোন VIP সক্রিয় নেই।</p>";
+        return;
+      }
+
+      statusDiv.innerHTML = `
+        <div class="vip-status">
+          <p>✅ সক্রিয়: ${vip.name}</p>
+          <p>ঘণ্টায় আয়: ৳${vip.hourly}</p>
+          <button onclick="collectIncome()">💸 আয় সংগ্রহ করুন</button>
+        </div>
+      `;
+    }
+
+    function collectIncome() {
+      const now = Date.now();
+      const last = user.lastCollect || user.vipStart;
+      const hours = Math.floor((now - last) / (1000 * 60 * 60));
+
+      if (hours <= 0) {
+        alert("⏳ আয় সংগ্রহ করতে আরও সময় অপেক্ষা করুন।");
+        return;
+      }
+
+      const hourly = vipInfo[user.vip].hourly;
+      const totalEarned = hours * hourly;
+      user.balance += totalEarned;
+      user.lastCollect = now;
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      alert(`✅ আয় যুক্ত হয়েছে: ৳${totalEarned.toFixed(2)} (${hours} ঘন্টা)`);
+
+      showVIPStatus();
+    }
+
+    showVIPStatus();
+  </script>
+</body>
+<button onclick="goToIncome()">💼 আয়</button>
+</html>
