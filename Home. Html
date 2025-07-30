@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>হোম - Eazy to Earn</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://i.imgur.com/KnfGxIR.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.75);
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #000;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    #balance {
+      text-align: center;
+      font-size: 20px;
+      background-color: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    .reward-btn {
+      background-color: #007bff;
+    }
+    .reward-btn:hover {
+      background-color: #0069d9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🏠 হোম</h2>
+
+    <button onclick="recharge()">💳 টাকা রিচার্জ</button>
+    <button onclick="withdraw()">💰 উত্তোলন</button>
+    <button onclick="support()">📞 গ্রাহক সেবা</button>
+
+    <div id="balance">🔢 একাউন্ট ব্যালেন্স: ৳<span id="balanceAmount">0</span></div>
+
+    <button class="reward-btn" onclick="claimReward()">🎁 লগ ইন পুরস্কার</button>
+  </div>
+
+  <script>
+    // ইউজার ইনফো (localStorage থেকে)
+    let user = JSON.parse(localStorage.getItem("currentUser")) || { balance: 0, lastClaim: 0 };
+    document.getElementById("balanceAmount").innerText = user.balance;
+
+    function recharge() {
+      alert("💳 রিচার্জ ফিচার শীঘ্রই আসছে।");
+    }
+
+    function withdraw() {
+      alert("💰 উত্তোলন ফিচার শীঘ্রই আসছে।");
+    }
+
+    function support() {
+      alert("📞 গ্রাহক সেবা: ০১৭xxxxxxxx");
+    }
+
+    function claimReward() {
+      const now = Date.now();
+      const lastClaim = user.lastClaim || 0;
+
+      if (now - lastClaim >= 86400000) {
+        user.balance += 10;
+        user.lastClaim = now;
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        document.getElementById("balanceAmount").innerText = user.balance;
+        alert("🎉 ১০ টাকা পুরস্কার যুক্ত হয়েছে!");
+      } else {
+        const hoursLeft = Math.ceil((86400000 - (now - lastClaim)) / 3600000);
+        alert("⏳ আবার পুরস্কার নিতে পারবেন " + hoursLeft + " ঘণ্টা পরে।");
+      }
+    }
+  </script>
+</body>
+<button onclick="goToRecharge()">হোম</button>
+</html>
